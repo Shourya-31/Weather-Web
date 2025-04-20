@@ -1,33 +1,40 @@
 fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`)
   .then(res => res.json())
   .then(data => {
-    const dailyData = {};
+    const dailyTemps = {};
 
     data.list.forEach(item => {
       const date = item.dt_txt.split(" ")[0];
-      const hour = item.dt_txt.split(" ")[1].split(":")[0];
+      const temp = item.main.temp;
+      const icon = item.weather[0].icon;
+      const description = item.weather[0].description;
 
-      // Save the 12:00 PM reading (or closest)
-      if (!dailyData[date] || hour === "12") {
-        dailyData[date] = item;
+      if (!dailyTemps[date]) {
+        dailyTemps[date] = {
+          temps: [],
+          icon: icon,
+          description: description
+        };
       }
+
+      dailyTemps[date].temps.push(temp);
     });
 
     forecastContainer.innerHTML = "";
-    const forecastEntries = Object.values(dailyData).slice(0, 5); // Only next 5 days
+    const forecastEntries = Object.entries(dailyTemps).slice(0, 5);
 
-    forecastEntries.forEach(forecast => {
-      const { dt_txt } = forecast;
-      const { temp } = forecast.main;
-      const { description, icon } = forecast.weather[0];
+    forecastEntries.forEach(([date, info]) => {
+      const temps = info.temps;
+      const min = Math.min(...temps).toFixed(1);
+      const max = Math.max(...temps).toFixed(1);
 
       const dayCard = document.createElement("div");
       dayCard.className = "forecast-day";
       dayCard.innerHTML = `
-        <h4>${new Date(dt_txt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</h4>
-        <img src="https://openweathermap.org/img/wn/${icon}.png" alt="${description}">
-        <p>${description}</p>
-        <p><strong>${Math.round(temp)}°C</strong></p>
+        <h4>${new Date(date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</h4>
+        <img src="https://openweathermap.org/img/wn/${info.icon}.png" alt="${info.description}">
+        <p>${info.description}</p>
+        <p><strong>${min}°C / ${max}°C</strong></p>
       `;
       forecastContainer.appendChild(dayCard);
     });
