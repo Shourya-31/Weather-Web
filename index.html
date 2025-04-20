@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🌤 Weather App</h1>
+    <div class="search-box">
+      <input type="text" id="cityInput" placeholder="Enter city name" />
+      <button id="getWeatherBtn">Search</button>
+    </div>
+
+    <div class="toggle">
+      <label class="switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider round"></span>
+      </label>
+      <span>Dark Mode</span>
+    </div>
+
+    <div id="loader" class="loader hidden"></div>
+
+    <div id="weatherResult" class="weather-card hidden"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
