@@ -1,21 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Weather App</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e3f2fd;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    #weatherResult img {
+      width: 100px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      background: #2196f3;
+      border: none;
+      color: white;
+      border-radius: 5px;
+    }
+    button:hover {
+      background: #1976d2;
+    }
+    #weatherResult {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
-  <div class="weather-container">
-    <h1>🌦️ Weather App</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name">
-    <button id="getWeatherBtn">Get Weather</button>
+  <h1>🌤 Weather App</h1>
+  <input type="text" id="cityInput" placeholder="Enter city name" />
+  <button id="getWeatherBtn">Get Weather</button>
+  <div id="weatherResult"></div>
 
-    <div id="weatherResult" class="result">
-      
-    </div>
-  </div>
+  <script>
+    const apiKey = "8f6a4d5d1f26bac935ccb831efd16abf"; // Replace with your own API key
+    const btn = document.getElementById("getWeatherBtn");
 
-  <script src="script.js"></script>
+    btn.addEventListener("click", () => {
+      const city = document.getElementById("cityInput").value.trim();
+      if (city !== "") {
+        getWeather(city);
+      } else {
+        alert("Please enter a city name.");
+      }
+    });
+
+    function getWeather(city) {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      fetch(url)
+        .then(res => {
+          if (!res.ok) throw new Error("City not found");
+          return res.json();
+        })
+        .then(data => {
+          const { name } = data;
+          const { temp, humidity } = data.main;
+          const { description, icon } = data.weather[0];
+          const { speed } = data.wind;
+
+          document.getElementById("weatherResult").innerHTML = `
+            <h2>${name}</h2>
+            <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="${description}">
+            <p><strong>${description}</strong></p>
+            <p>🌡 Temperature: ${temp}°C</p>
+            <p>💧 Humidity: ${humidity}%</p>
+            <p>🌬 Wind Speed: ${speed} m/s</p>
+          `;
+        })
+        .catch(err => {
+          document.getElementById("weatherResult").innerHTML = `<p style="color: red;">${err.message}</p>`;
+        });
+    }
+  </script>
 </body>
 </html>
