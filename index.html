@@ -2,30 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weather App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Weather Forecast App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🌦️ Weather Dashboard</h1>
-
-    <div class="search-box">
-      <input type="text" id="cityInput" placeholder="Enter city, state code (e.g., Mumbai, MH)">
+    <h1>🌤️ Weather Forecast</h1>
+    <div class="search">
+      <input type="text" id="cityInput" placeholder="Enter city, state code (e.g., Delhi, DL)" />
       <button id="getWeatherBtn">Search</button>
     </div>
 
-    <div class="toggle">
-      <label class="switch">
-        <input type="checkbox" id="darkModeToggle">
-        <span class="slider round"></span>
-      </label>
-      <span>Dark Mode</span>
-    </div>
-
-    <div id="loader" class="loader hidden"></div>
-
-    <div id="currentWeather" class="weather-card hidden"></div>
+    <div id="weatherResult" class="weather-card"></div>
 
     <h2 id="forecastTitle" class="hidden">5-Day Forecast</h2>
     <div id="forecast" class="forecast-container hidden"></div>
